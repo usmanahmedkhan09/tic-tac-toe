@@ -7,7 +7,8 @@ class TicToe extends React.Component
         currentPlayer: null,
         playerOne: "X",
         playertwo: "O",
-        data: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        data: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        gameOver: false
     };
 
     checkWinner = (index) =>
@@ -43,7 +44,9 @@ class TicToe extends React.Component
             this.nextMove(index);
         } else
         {
-            console.log("winner");
+            this.setState({
+                gameOver: true
+            })
         }
     };
     nextMove = () =>
@@ -75,11 +78,12 @@ class TicToe extends React.Component
             item.currentPlayer = "X"; // update the name property, assign a new value
             return item; // return new object
         });
-        setTimeout(() => this.checkWinner(), 1000);
+        setTimeout(() => this.checkWinner(), 500);
     };
     render()
     {
-        let row = this.state.data.map((item, index) =>
+        let Conatiner = null
+        let board = this.state.data.map((item, index) =>
         {
             let ItemClass = item === "X" || item === "O" ? "darkColor" : "liteColor";
             return (
@@ -92,15 +96,31 @@ class TicToe extends React.Component
                 </div>
             );
         });
-        return (
-            <>
-                {/* <span>{this.state.currentPlayer}</span> */}
-                <div className="Container">
-                    {/* <div> */}
-                    {row}
-                    {/* </div> */}
-                </div>
+        if (this.state.gameOver)
+        {
+            Conatiner = <>
+                <span className="winner">{this.state.currentPlayer}</span>
+                <div style={{ fontSize: 32 + 'px', position: 'absolute', top: 4.5 + 'em', left: -24, fontWeight: 'bold', color: 'rgb(82, 79, 79)' }}>WINNER!</div>
             </>
+        } else
+        {
+            Conatiner =
+                <>
+                    <div className="players-info">
+                        <div className={`player-one ${this.state.currentPlayer === 'O' ? 'border-bottom' : ''}`}>{this.state.playerOne}</div>
+                        <div className={`player-two ${this.state.currentPlayer === 'X' ? 'border-bottom' : ''}`}>{this.state.playertwo}</div>
+                    </div>
+                    <div className="Container">
+                        {board}
+                    </div>
+                </>
+
+
+        }
+        return (
+            <div style={{ position: "relative" }}>
+                {Conatiner}
+            </div>
         );
     }
 }
